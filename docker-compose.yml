@@ -1,0 +1,48 @@
+version: "3"
+services:
+  postgres:
+    restart: always
+    container_name: postgres
+    image: postgres:15.2
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/postgres:/data/postgres
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    networks:
+      - postgres
+ 
+  elasticsearch:
+    restart: always
+    image: elasticsearch:7.8.1
+    container_name: elasticsearch
+    volumes:
+      - elastic-data:/usr/share/elasticsearch/data
+    environment:
+      discovery.type: 'single-node'
+      xpack.security.enabled: 'true'
+      ELASTIC_USERNAME: ${ELASTICSEARCH_USERNAME}
+      ELASTIC_PASSWORD: ${ELASTICSEARCH_PASSWORD}
+    network_mode: "host"
+
+  kibana:
+    restart: always
+    image: kibana:7.8.1
+    container_name: kibana
+    environment:
+      XPACK_SECURITY_ENABLED: 'true'
+      ELASTICSEARCH_HOSTS: ${ELASTICSEARCH_NODE}
+      ELASTICSEARCH_USERNAME: ${ELASTICSEARCH_USERNAME}
+      ELASTICSEARCH_PASSWORD: ${ELASTICSEARCH_PASSWORD}
+    network_mode: "host"
+
+volumes:
+  elastic-data:
+    driver: local
+
+networks:
+  postgres:
+    driver: bridge
