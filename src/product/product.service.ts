@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
@@ -38,5 +38,14 @@ export class ProductService {
       items,
       count,
     };
+  }
+
+  async deleteProduct(id: number) {
+    const deleteResponse = await this.postsRepository.delete(id);
+    if (!deleteResponse.affected) {
+      throw new NotFoundException(`Product with id ${id} not found`);
+    }
+    await this.searchService.remove(id);
+    return true;
   }
 }

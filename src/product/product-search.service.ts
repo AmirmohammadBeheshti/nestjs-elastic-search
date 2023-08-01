@@ -23,8 +23,19 @@ export class ProductSearchService {
       },
     });
   }
-
-  async search(text: string, offset?: number, limit?: number, startId = 0) {
+  async remove(articleId: number) {
+    this.elasticsearchService.deleteByQuery({
+      index: this.index,
+      body: {
+        query: {
+          match: {
+            id: articleId,
+          },
+        },
+      },
+    });
+  }
+  async search(text: string, offset?: number, limit?: number) {
     const { body } =
       await this.elasticsearchService.search<ProductSearchResult>({
         index: this.index,
@@ -37,13 +48,6 @@ export class ProductSearchService {
                 multi_match: {
                   query: text,
                   fields: ['title', 'content'],
-                },
-              },
-              filter: {
-                range: {
-                  id: {
-                    gt: startId,
-                  },
                 },
               },
             },
