@@ -32,6 +32,6 @@ export class ProductController {
 
   @Get(':id')
   getPostById(@Param('id', ParseIntPipe) id: number) {
-    return this.productService.getProductById(Number(id));
+    return this.productService.getProductById(+id);
   }
 }
