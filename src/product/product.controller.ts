@@ -29,4 +29,9 @@ export class ProductController {
   async deletePost(@Param('id', ParseIntPipe) id: number) {
     return this.productService.deleteProduct(+id);
   }
+
+  @Get(':id')
+  getPostById(@Param('id', ParseIntPipe) id: number) {
+    return this.productService.getProductById(Number(id));
+  }
 }

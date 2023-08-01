@@ -40,6 +40,16 @@ export class ProductService {
     };
   }
 
+  async getProductById(id: number) {
+    const post = await this.postsRepository.findOne({
+      where: { id },
+    });
+    if (post) {
+      return post;
+    }
+    throw new NotFoundException(`Post with id ${id} not found`);
+  }
+
   async deleteProduct(id: number) {
     const deleteResponse = await this.postsRepository.delete(id);
     if (!deleteResponse.affected) {
