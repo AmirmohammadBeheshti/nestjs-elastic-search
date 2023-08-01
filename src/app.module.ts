@@ -2,7 +2,9 @@ import { Module } from '@nestjs/common';
 import { ProductModule } from './product/product.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ElasticsearchModule } from '@nestjs/elasticsearch';
 import * as Joi from 'joi';
+import ProductEntity from './product/entity/product.entity';
 
 @Module({
   imports: [
@@ -29,11 +31,12 @@ import * as Joi from 'joi';
         username: configService.get('POSTGRES_USER'),
         password: configService.get('POSTGRES_PASSWORD'),
         database: configService.get('POSTGRES_DB'),
-        entities: [],
+        entities: [ProductEntity],
         synchronize: true,
         autoLoadEntities: true,
       }),
     }),
+
     ProductModule,
   ],
 })
