@@ -25,10 +25,6 @@ export class ProductSearchService {
   }
 
   async search(text: string, offset?: number, limit?: number, startId = 0) {
-    // let separateCount = 0;
-    // if (startId) {
-    //   separateCount = await this.count(text, ['title', 'content']);
-    // }
     const { body } =
       await this.elasticsearchService.search<ProductSearchResult>({
         index: this.index,
@@ -63,8 +59,7 @@ export class ProductSearchService {
     const hits = body.hits.hits;
     const results = hits.map((item) => item._source);
     return {
-      // count: startId ? separateCount : count,
-      count: 0,
+      count: count,
       results,
     };
   }
