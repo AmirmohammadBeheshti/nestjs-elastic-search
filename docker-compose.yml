@@ -17,27 +17,19 @@ services:
  
   elasticsearch:
     restart: always
-    image: elasticsearch:7.8.1
+    image: elasticsearch:8.8.1
     container_name: elasticsearch
     volumes:
       - elastic-data:/usr/share/elasticsearch/data
+    ports:
+      - "9300:9300"
+      - "9200:9200"
     environment:
       discovery.type: 'single-node'
       xpack.security.enabled: 'true'
       ELASTIC_USERNAME: ${ELASTICSEARCH_USERNAME}
       ELASTIC_PASSWORD: ${ELASTICSEARCH_PASSWORD}
-    network_mode: "host"
 
-  kibana:
-    restart: always
-    image: kibana:7.8.1
-    container_name: kibana
-    environment:
-      XPACK_SECURITY_ENABLED: 'true'
-      ELASTICSEARCH_HOSTS: ${ELASTICSEARCH_NODE}
-      ELASTICSEARCH_USERNAME: ${ELASTICSEARCH_USERNAME}
-      ELASTICSEARCH_PASSWORD: ${ELASTICSEARCH_PASSWORD}
-    network_mode: "host"
 
 volumes:
   elastic-data:
